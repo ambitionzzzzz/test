@@ -1,0 +1,112 @@
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+
+
+public class txt {
+    public  static void main(String[] args) throws  IOException{
+        int i,j=0,k,p=0;
+        String str;
+        String[] strings=new String[1000];//放数据
+        String[] strings1=new String[1000]; //放省名字
+        File file=new File("D:\\QQdata\\1067340866\\FileRecv\\yq_in.txt");
+
+        FileInputStream fileInputStream=new FileInputStream(file);//文件输入流
+        InputStreamReader inputStreamReader=new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);//输入阅读流
+        BufferedReader bufferedReader=new BufferedReader(inputStreamReader); //缓冲阅读
+        str=bufferedReader.readLine();
+        for (i=1;i<gettotallines("D:\\QQdata\\1067340866\\FileRecv\\yq_in.txt");i++) {
+                strings[i-1]=str;
+            //    System.out.println(strings[i-1]);
+
+                str=bufferedReader.readLine();
+        }
+
+        strings1[j]=strings[j].substring(0,find(strings[j])+1);
+      //  System.out.println(strings1[0]=strings[0].substring(0,find(strings[0])+1));
+        for (i=0;strings[i]!=null;i++) {
+
+           if (strings[i+1]!=null) {
+               if (!strings[i].substring(0, find(strings[i])).equals(strings[i + 1].substring(0, find(strings[i + 1])))) {
+                   j=j+1;
+                   strings1[j] = strings[i + 1].substring(0, find(strings[i + 1]) + 1);
+               }
+           }
+        }
+
+      // File file1=new File("C:\\Users\\10673\\Desktop\\test4.txt");
+        BufferedWriter bufferedWriter = null;
+        try {
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Users\\10673\\Desktop\\test5.txt"), "UTF-8"));
+            for (i=0;strings1[i]!=null;i++) {
+                System.out.println(strings1[i]);
+                bufferedWriter.write(strings1[i]);
+                bufferedWriter.newLine();
+                for (k=0;k<findnumber(strings,strings1[i]);k++) {
+                    System.out.println(strings[k+p].substring(4,strings[k+p].length()));
+                      bufferedWriter.append(strings[k+p].substring(4,strings[k+p].length()));
+                      bufferedWriter.newLine();
+                }
+                p=p+findnumber(strings,strings1[i]);
+            }
+        } catch (Exception e) {
+           e.printStackTrace();
+        } finally {
+            try {
+                if (bufferedWriter != null) {
+                    bufferedWriter.close();
+                    bufferedWriter.close();
+                }
+            } catch (Exception e) {
+             e.printStackTrace();
+            }
+        }
+
+   /*   for (i=0;strings1[i]!=null;i++) {
+           System.out.println(strings1[i]);
+         //  bufferedWriter.write(strings1[i]);
+          // bufferedWriter.newLine();
+           for (k=0;k<findnumber(strings,strings1[i]);k++) {
+               System.out.println(strings[k+p].substring(4,strings[k+p].length()));
+             //  bufferedWriter.append(strings[k+p].substring(4,strings[k+p].length()));
+             //  bufferedWriter.newLine();
+           }
+           p=p+findnumber(strings,strings1[i]);
+      } */
+       //System.out.println(findnumber(strings,strings1[1]));
+       // System.out.println(strings1[0]=strings[0].substring(0,find(strings[0])));
+
+
+
+    }
+
+    // 文件内容的总行数
+    static int gettotallines(String filename) throws IOException {
+        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
+        LineNumberReader lineNumberReader=new LineNumberReader(bufferedReader);
+        String str=lineNumberReader.readLine();//定义总行数
+        int lines=0;
+        while(str!=null) { //确定行数
+            str=lineNumberReader.readLine();
+            lines++;
+        }
+        bufferedReader.close();
+        lineNumberReader.close();
+        return  lines;//返回行数
+    }
+
+   static  int find(String str) {
+         int i;
+         return i=str.indexOf("省");
+    }
+
+    static  int findnumber(String[] strings,String str) { //求出每个省的行数
+        int i,j=0;
+        for (i=0;strings[i]!=null;i++) {
+            if (strings[i].substring(0, find(strings[i]) + 1).equals(str)) {
+                j++;
+            }
+        }
+        return j;
+    }
+}
